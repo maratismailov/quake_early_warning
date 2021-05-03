@@ -5,15 +5,18 @@ import os
 import asyncio
 from starlette.endpoints import WebSocket, WebSocketEndpoint
 from typing import Dict, Tuple
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from datetime import datetime
 import telegram_send
-import telebot;
-
-bot = telebot.TeleBot('1797763054:AAENh337dik1__AEKvv9Ad6ty4O8M437-ak');
-bot.polling()
+import time
+import re
 
 
 UDP_PORT = 8001
 message_data = 'te'
+qids = []
 
 
 
@@ -28,16 +31,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    # return render_template('report.html', hists = hists)
+    return templates.TemplateResponse("index.html", {"request": request})
+
 class MyUDPProtocol(asyncio.DatagramProtocol):
     def connection_made(self, transport: asyncio.DatagramTransport) -> None:
         self.transport = transport
 
     def datagram_received(self, data: bytes, addr: Tuple[str, int]) -> None:
-        print('received', data)
         # telegram_send.send(messages=[data.decode("utf-8")])
         message_data = data.decode("utf-8")
-        print('sent')
-        send()
+        if 'ALARM DEST:T_BISH' in message_data:
+            pattern = r'.*?QID:(.*) SEQ.*'  
+            match = re.search(pattern, message_data)
+            qid = match.group(1)
+            print('qid', qid, 'end')
+            for id in qids:
+                if qid == id:
+                    print('d')
+
+            current_time = str(datetime.now())
+            text_file = open("logs/" + current_time + '.log', "w+")
+            text_file.write(message_data)
+            text_file.close()
+            # telegram_send.send(messages=[data.decode("utf-8")])
+            print(message_data)
+            # time.sleep(60)
+        # telegram_send.send(messages=[message_data])
+   
+
+        
         return 's'
         ws_client = ws_clients[addr[0]]
         print(data)
@@ -52,13 +81,14 @@ async def on_startup() -> None:
     )
     app.state.udp_transport = transport
     app.state.udp_protocol = protocol
+    print('start')
+    qids_file = open('qids.json', 'r')
+    qids = json.load(qids_file)
+    for qid in qids:
+        print(qid)
 
-@bot.message_handler(content_types=["text"])
-def send(message):
-    print('dfsdfsd')
-    bot.send_message(message.chat.id, message_data)
-
-
+def make_alarm(message):
+    print('dd')
 
 
 # @bot.message_handler(content_types=['text'])
