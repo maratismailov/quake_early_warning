@@ -7,5 +7,3 @@ services:
       - "33555:33555/udp"
     volumes:
       - .conf:/conf
-    environment:
-      - LOCAL_ADDR=172.22.0.15
