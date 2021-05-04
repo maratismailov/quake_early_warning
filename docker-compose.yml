@@ -5,4 +5,4 @@ services:
     ports:
       - "6969:80"
     volumes:
-      - conf:/conf
+      - .conf:/conf
