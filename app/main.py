@@ -17,7 +17,7 @@ LOCAL_ADDR = os.environ.get('LOCAL_ADDR')
 if LOCAL_ADDR == None:
     LOCAL_ADDR = "0.0.0.0"
 
-UDP_PORT = 8888
+UDP_PORT = 33555
 message_data = 'te'
 qids = []
 

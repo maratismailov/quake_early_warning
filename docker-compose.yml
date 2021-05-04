@@ -4,18 +4,8 @@ services:
     image: regfe89/kg_early_warning:latest
     ports:
       - "6969:80"
-      - "8899:8888"
+      - "33555:33555/udp"
     volumes:
       - .conf:/conf
     environment:
       - LOCAL_ADDR=172.22.0.15
-    networks:
-      network:
-        ipv4_address: 172.22.0.15
-
-networks:
-  network:
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.22.0.0/24
