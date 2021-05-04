@@ -14,10 +14,10 @@ import time
 import re
 
 LOCAL_ADDR = os.environ.get('LOCAL_ADDR')
-if LOCAL_ADDR == "":
+if LOCAL_ADDR == None:
     LOCAL_ADDR = "0.0.0.0"
 
-UDP_PORT = 8001
+UDP_PORT = 8888
 message_data = 'te'
 qids = []
 
