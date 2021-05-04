@@ -72,8 +72,9 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
 @app.on_event("startup")
 async def on_startup() -> None:
     loop = asyncio.get_running_loop()
+    print('staaaaaaaart')
     transport, protocol = await loop.create_datagram_endpoint(
-        lambda: MyUDPProtocol(), local_addr=(LOCAL_ADDR, UDP_PORT)
+        lambda: MyUDPProtocol(), local_addr=('0.0.0.0', UDP_PORT)
     )
     app.state.udp_transport = transport
     app.state.udp_protocol = protocol
