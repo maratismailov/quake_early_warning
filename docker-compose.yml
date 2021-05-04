@@ -6,5 +6,3 @@ services:
       - "6969:80"
     volumes:
       - conf:/conf
-    command: ["telegram-send --config /conf/telegram-send.conf"]
-
