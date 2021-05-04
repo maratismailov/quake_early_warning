@@ -13,6 +13,9 @@ import telegram_send
 import time
 import re
 
+LOCAL_ADDR = os.environ.get('LOCAL_ADDR')
+if LOCAL_ADDR == "":
+    LOCAL_ADDR = "0.0.0.0"
 
 UDP_PORT = 8001
 message_data = 'te'
