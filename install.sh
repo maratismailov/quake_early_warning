@@ -6,4 +6,5 @@ pip install fastapi
 pip install uvicorn
 pip install aiofiles
 pip install jinja2
+pip install telegram-send
 pip freeze -> requirements.txt

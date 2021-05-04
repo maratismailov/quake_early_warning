@@ -1,19 +1,10 @@
-version: '3.7'
+version: '3.5'
 services:
-  survey_editor:
-    image: regfe89/survey_editor_backend:latest
+  early_warning:
+    image: regfe89/kg_early_warning:latest
     ports:
-      - "8000:80"
-    environment:
-      - DBPASSWORD=
-      - DBUSER=
-    networks:
-      survey_network:
-        ipv4_address: 172.22.0.8
+      - "6969:80"
+    volumes:
+      - conf:/conf
+    command: ["telegram-send --config /conf/telegram-send.conf"]
 
-networks:
-  survey_network:
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.22.0.0/24

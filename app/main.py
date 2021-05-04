@@ -18,8 +18,6 @@ UDP_PORT = 8001
 message_data = 'te'
 qids = []
 
-
-
 app = FastAPI()
 ws_clients: Dict[str, WebSocket] = {}
 
@@ -37,8 +35,9 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    # return render_template('report.html', hists = hists)
-    return templates.TemplateResponse("index.html", {"request": request})
+
+    # return templates.TemplateResponse("index.html", {"request": request})
+    return 'main'
 
 class MyUDPProtocol(asyncio.DatagramProtocol):
     def connection_made(self, transport: asyncio.DatagramTransport) -> None:
@@ -51,25 +50,19 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
             pattern = r'.*?QID:(.*) SEQ.*'  
             match = re.search(pattern, message_data)
             qid = match.group(1)
-            print('qid', qid, 'end')
-            for id in qids:
-                if qid == id:
-                    print('d')
+            if qid not in qids:
+                qids.append(qid)
+                current_time = str(datetime.now())
+                text_file = open("logs/" + current_time + '.log', "w+")
+                text_file.write(message_data)
+                text_file.close()
+                print(message_data)
+                # os.system("telegram-send --config $HOME/projects/quake_early_warning/telegram-send.conf '{}'".format(message_data))
+                os.system("telegram-send --config /conf/telegram-send.conf '{}'".format(message_data))
+                # telegram_send.send(config=['telegram-send.conf'],messages=[message_data])
 
-            current_time = str(datetime.now())
-            text_file = open("logs/" + current_time + '.log', "w+")
-            text_file.write(message_data)
-            text_file.close()
-            # telegram_send.send(messages=[data.decode("utf-8")])
-            print(message_data)
-            # time.sleep(60)
-        # telegram_send.send(messages=[message_data])
-   
-
-        
         return 's'
         ws_client = ws_clients[addr[0]]
-        print(data)
         asyncio.create_task(send_info_to_client(ws_client, data))
 
 
@@ -81,19 +74,3 @@ async def on_startup() -> None:
     )
     app.state.udp_transport = transport
     app.state.udp_protocol = protocol
-    print('start')
-    qids_file = open('qids.json', 'r')
-    qids = json.load(qids_file)
-    for qid in qids:
-        print(qid)
-
-def make_alarm(message):
-    print('dd')
-
-
-# @bot.message_handler(content_types=['text'])
-# @bot.message_handler(commands=['start'])
-# def send(message):
-#     bot.send_message(message.chat.id, 'dd')
-
-
