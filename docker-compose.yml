@@ -4,5 +4,6 @@ services:
     image: regfe89/kg_early_warning:latest
     ports:
       - "6969:80"
+      - "8001:8001"
     volumes:
       - .conf:/conf
