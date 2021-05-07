@@ -28,6 +28,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def index(request: Request):
+    return 'main'
+
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 # templates = Jinja2Templates(directory="templates")
@@ -41,10 +45,12 @@ app.add_middleware(
 class MyUDPProtocol(asyncio.DatagramProtocol):
     def connection_made(self, transport: asyncio.DatagramTransport) -> None:
         self.transport = transport
+        print('connection made')
 
     def datagram_received(self, data: bytes, addr: Tuple[str, int]) -> None:
         # telegram_send.send(messages=[data.decode("utf-8")])
         message_data = data.decode("utf-8")
+        print('d')
         if 'ALARM DEST:T_BISH' in message_data:
             pattern = r'.*?QID:(.*) SEQ.*'  
             match = re.search(pattern, message_data)
@@ -69,9 +75,10 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
 
 @app.on_event("startup")
 async def on_startup() -> None:
+    print('startup')
     loop = asyncio.get_running_loop()
     transport, protocol = await loop.create_datagram_endpoint(
-        lambda: MyUDPProtocol(), local_addr=('0.0.0.0', UDP_PORT)
+        lambda: MyUDPProtocol(), local_addr=('0.0.0.0', UDP_PORT), reuse_port=1
     )
     app.state.udp_transport = transport
     app.state.udp_protocol = protocol
