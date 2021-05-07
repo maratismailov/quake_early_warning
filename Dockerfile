@@ -4,6 +4,8 @@ COPY requirements.txt /tmp
 
 COPY ./start.sh /start.sh
 
+RUN chmod +x start.sh
+
 WORKDIR /tmp
 
 COPY ./app /app
