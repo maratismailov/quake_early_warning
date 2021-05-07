@@ -50,7 +50,7 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
     def datagram_received(self, data: bytes, addr: Tuple[str, int]) -> None:
         # telegram_send.send(messages=[data.decode("utf-8")])
         message_data = data.decode("utf-8")
-        print('d')
+        print(message_data)
         if 'ALARM DEST:T_BISH' in message_data:
             pattern = r'.*?QID:(.*) SEQ.*'  
             match = re.search(pattern, message_data)
@@ -66,7 +66,7 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
                 os.system("telegram-send --config /conf/telegram-send.conf '{}'".format(message_data))
                 # telegram_send.send(config=['telegram-send.conf'],messages=[message_data])
         else:
-            print('osh')
+            print(message_data)
 
         return 's'
         ws_client = ws_clients[addr[0]]
