@@ -2,6 +2,8 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:latest
 
 COPY requirements.txt /tmp
 
+COPY ./start.sh /start.sh
+
 WORKDIR /tmp
 
 COPY ./app /app
