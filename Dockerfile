@@ -10,3 +10,5 @@ RUN pip install -r requirements.txt &&\
     chmod -R 777 /conf
 
 COPY ./app /app
+
+EXPOSE 33555/udp

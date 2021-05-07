@@ -13,10 +13,6 @@ import telegram_send
 import time
 import re
 
-LOCAL_ADDR = os.environ.get('LOCAL_ADDR')
-if LOCAL_ADDR == None:
-    LOCAL_ADDR = "0.0.0.0"
-
 UDP_PORT = 33555
 message_data = 'te'
 qids = []
@@ -36,11 +32,11 @@ app.add_middleware(
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 # templates = Jinja2Templates(directory="templates")
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
+# @app.get("/", response_class=HTMLResponse)
+# async def index(request: Request):
 
-    # return templates.TemplateResponse("index.html", {"request": request})
-    return 'main'
+#     # return templates.TemplateResponse("index.html", {"request": request})
+#     return 'main'
 
 class MyUDPProtocol(asyncio.DatagramProtocol):
     def connection_made(self, transport: asyncio.DatagramTransport) -> None:
@@ -63,6 +59,8 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
                 # os.system("telegram-send --config $HOME/projects/quake_early_warning/telegram-send.conf '{}'".format(message_data))
                 os.system("telegram-send --config /conf/telegram-send.conf '{}'".format(message_data))
                 # telegram_send.send(config=['telegram-send.conf'],messages=[message_data])
+        else:
+            print('osh')
 
         return 's'
         ws_client = ws_clients[addr[0]]
@@ -72,7 +70,6 @@ class MyUDPProtocol(asyncio.DatagramProtocol):
 @app.on_event("startup")
 async def on_startup() -> None:
     loop = asyncio.get_running_loop()
-    print('staaaaaaaart')
     transport, protocol = await loop.create_datagram_endpoint(
         lambda: MyUDPProtocol(), local_addr=('0.0.0.0', UDP_PORT)
     )
