@@ -29,7 +29,7 @@ app.add_middleware(
 )
 
 @app.get("/")
-async def index(request: Request):
+async def index():
     return 'main'
 
 
