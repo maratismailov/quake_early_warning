@@ -9,6 +9,8 @@ qids = []
 print('start')
 def parse_message(data):
     message_data = data.decode("utf-8")
+    if message_data == 'testpacket':
+        os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
     if 'ALARM DEST:T_BISH' in message_data:
         qid_pattern = r'.*?QID:(.*) SEQ:.*'
         qid_match = re.findall(qid_pattern, message_data)
