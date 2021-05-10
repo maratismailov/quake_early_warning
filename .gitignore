@@ -3,3 +3,5 @@ __pycache__/
 setenv.sh
 *.log
 telegram-send.conf
+socket
+nohup.out

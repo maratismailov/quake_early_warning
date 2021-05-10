@@ -1,9 +1,0 @@
-version: '3.5'
-services:
-  early_warning:
-    image: regfe89/kg_early_warning:latest
-    ports:
-      - "6969:80"
-      - "33555:33555/udp"
-    volumes:
-      - .conf:/conf
