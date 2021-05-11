@@ -94,6 +94,8 @@ def parse_message(data):
             text_file.write(message_data)
             text_file.close()
             os.system("telegram-send --config ./telegram-send.conf '{}'".format(message))
+    elif 'HEARTBEAT' in message_data:
+        os.system("telegram-send --config ./telegram-send.conf 'heartbeat'")
 
 UDP_IP = "0.0.0.0"
 UDP_PORT = 33556
