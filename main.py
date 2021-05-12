@@ -87,7 +87,7 @@ def parse_message(data):
 
                 message = 'event_time:' + e_time + '\n' + 'reg_time:' + reg_time + '\n' + 'arrival time:' + arrival_time_str + '\n' + 'mag:' + mag + '\n' + 'pgv:' + pgv + '\n' + 'pga:' + pga + '\n' + 'lon:' + lon + '\n' + 'lat:' + lat + '\n' + 'dep:' + dep + '\n'
                 print(message)
-                qids.append(qid)
+                # qids.append(qid)
                 try:
                     current_time = str(datetime.now())
                     text_file = open("logs/" + current_time + '.log', "w+")
