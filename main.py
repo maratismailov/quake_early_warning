@@ -96,10 +96,13 @@ def parse_message(data):
                 except:
                     print('no_log')
                 os.system("telegram-send --config ./telegram-send.conf '{}'".format(message))
-            except:
-                os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+        except:
+            os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
     else:
-        os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+        try:
+            os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+        except:
+            print('not sent')
 
 UDP_IP = "0.0.0.0"
 UDP_PORT = 33556
