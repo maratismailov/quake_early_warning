@@ -95,12 +95,12 @@ def parse_message(data):
                     text_file.close()
                 except:
                     print('no_log')
-                os.system("telegram-send --config ./telegram-send.conf '{}'".format(message))
+                os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message))
         except:
-            os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+            os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
     else:
         try:
-            os.system("telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+            os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
         except:
             print('not sent')
 
