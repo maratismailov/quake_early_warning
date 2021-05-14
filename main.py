@@ -109,7 +109,7 @@ def parse_message(data):
             os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
     else:
         try:
-            os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+            os.system("./env/bin/telegram-send --config ./telegram-send-heartbeat.conf '{}'".format(message_data))
         except:
             print('not sent')
 
