@@ -86,7 +86,7 @@ def parse_message(data):
                 print('ftime', arrival_time)
                 arrival_time_str = arrival_time.strftime('%Y-%m-%d %H:%M:%S.%f')
 
-                message = 'quake id:' + qid + 'event_time:' + e_time + '\n' + 'reg_time:' + reg_time + '\n' + 'arrival time:' + arrival_time_str + '\n' + 'mag:' + mag + '\n' + 'pgv:' + pgv + '\n' + 'pga:' + pga + '\n' + 'lon:' + lon + '\n' + 'lat:' + lat + '\n' + 'dep:' + dep + '\n'
+                message = 'quake id:' + qid + '\n' + 'event_time:' + e_time + '\n' + 'reg_time:' + reg_time + '\n' + 'arrival time:' + arrival_time_str + '\n' + 'mag:' + mag + '\n' + 'pgv:' + pgv + '\n' + 'pga:' + pga + '\n' + 'lon:' + lon + '\n' + 'lat:' + lat + '\n' + 'dep:' + dep + '\n'
                 print(message)
                 params = mag + lat + lon
                 if params not in quake_params:
