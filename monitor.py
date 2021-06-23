@@ -4,9 +4,40 @@ import re
 from datetime import datetime, timedelta
 import telegram_send
 import os
+import sqlite3
+
+con = sqlite3.connect('app/quake_data.db')
+con.row_factory = sqlite3.Row
+cur = con.cursor()
+
+# Create table
+try:
+    cur.execute('''CREATE TABLE quakes(qid integer, event_time text, reg_time text, arrival_time text, mag real, pgv real, pga real, lon real, lat real, dep real)''')
+except:
+    print('not created')
+# Insert a row of data
+# cur.execute("INSERT INTO quakes VALUES (1,'2021-06-07 22:44:59.73','2021-06-07 22:44:59.73','2021-06-07 22:44:59.73',3.5,0.00106303,0.0195687,77.2168,40.6376,71.156)")
+
+# Save (commit) the changes
+con.commit()
+
+# We can also close the connection if we are done with it.
+# Just be sure any changes have been committed or they will be lost.
+print(con.total_changes)
+# quakes = cur.execute("SELECT `qid`, `event_time`, `reg_time`, `arrival_time`, `mag`, `pgv`, `pga`, `lon`, `lat`, `dep` FROM quakes").fetchall()
+quakes = cur.execute("SELECT * FROM quakes").fetchall()
+con.close()
+
+def write_quake_to_db(qid, e_time, reg_time, arrival_time_str, mag, pgv, pga, lon, lat, dep):
+    con = sqlite3.connect('app/quake_data.db')
+    cur = con.cursor()
+    cur.execute("INSERT INTO quakes VALUES ({}, '{}', '{}', '{}', {}, {}, {}, {}, {}, {})".format(qid, e_time, reg_time, arrival_time_str, mag, pgv, pga, lon, lat, dep))
+    con.commit()
+    con.close()
 
 qids = []
 quake_params = []
+event_times = []
 print('start')
 def parse_message(data):
     message_data = data.decode("utf-8")
@@ -87,8 +118,13 @@ def parse_message(data):
                 arrival_time_str = arrival_time.strftime('%Y-%m-%d %H:%M:%S.%f')
 
                 message = 'quake id:' + qid + '\n' + 'event_time:' + e_time + '\n' + 'reg_time:' + reg_time + '\n' + 'arrival time:' + arrival_time_str + '\n' + 'mag:' + mag + '\n' + 'pgv:' + pgv + '\n' + 'pga:' + pga + '\n' + 'lon:' + lon + '\n' + 'lat:' + lat + '\n' + 'dep:' + dep + '\n'
-                print(message)
                 params = mag + lat + lon
+                if e_time not in event_times:
+                    try:
+                        write_quake_to_db(qid, e_time, reg_time, arrival_time_str, mag, pgv, pga, lon, lat, dep)
+                        event_times.append(e_time)
+                    except:
+                        print('not written to db')
                 if params not in quake_params:
                     try:
                         current_time = str(datetime.now())
@@ -102,11 +138,12 @@ def parse_message(data):
                     except:
                         print('not sent')
                     quake_params.append(params)
-                
+
                 # qids.append(qid)
-             
+
         except:
-            os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
+            print('not parsed')
+            # os.system("./env/bin/telegram-send --config ./telegram-send.conf '{}'".format(message_data))
     else:
         try:
             os.system("./env/bin/telegram-send --config ./telegram-send-heartbeat.conf '{}'".format(message_data))
@@ -128,4 +165,3 @@ while True:
         parse_message(data)
     except:
         print('not parsed')
-
