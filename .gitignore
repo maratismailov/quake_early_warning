@@ -6,3 +6,4 @@ telegram-send.conf
 telegram-send-heartbeat.conf
 socket
 nohup.out
+app/quake_data.db

@@ -6,29 +6,15 @@ import telegram_send
 import os
 import sqlite3
 
-con = sqlite3.connect('app/quake_data.db')
-con.row_factory = sqlite3.Row
-cur = con.cursor()
-
-# Create table
-try:
-    cur.execute('''CREATE TABLE quakes(qid integer, event_time text, reg_time text, arrival_time text, mag real, pgv real, pga real, lon real, lat real, dep real)''')
-except:
-    print('not created')
-# Insert a row of data
-# cur.execute("INSERT INTO quakes VALUES (1,'2021-06-07 22:44:59.73','2021-06-07 22:44:59.73','2021-06-07 22:44:59.73',3.5,0.00106303,0.0195687,77.2168,40.6376,71.156)")
-
-# Save (commit) the changes
-con.commit()
-
-# We can also close the connection if we are done with it.
-# Just be sure any changes have been committed or they will be lost.
-print(con.total_changes)
-# quakes = cur.execute("SELECT `qid`, `event_time`, `reg_time`, `arrival_time`, `mag`, `pgv`, `pga`, `lon`, `lat`, `dep` FROM quakes").fetchall()
-quakes = cur.execute("SELECT * FROM quakes").fetchall()
-con.close()
-
 def write_quake_to_db(qid, e_time, reg_time, arrival_time_str, mag, pgv, pga, lon, lat, dep):
+    try:
+        con = sqlite3.connect('app/quake_data.db')
+        cur = con.cursor()
+        cur.execute('''CREATE TABLE quakes(qid integer, event_time text, reg_time text, arrival_time text, mag real, pgv real, pga real, lon real, lat real, dep real)''')
+        con.commit()
+        con.close()
+    except:
+        print('not created')
     con = sqlite3.connect('app/quake_data.db')
     cur = con.cursor()
     cur.execute("INSERT INTO quakes VALUES ({}, '{}', '{}', '{}', {}, {}, {}, {}, {}, {})".format(qid, e_time, reg_time, arrival_time_str, mag, pgv, pga, lon, lat, dep))
