@@ -1,2 +1,2 @@
 #! /usr/bin/bash
-nohup ./main.py >  run.log &
+nohup ./monitor.py >  run.log &
